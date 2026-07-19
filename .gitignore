@@ -131,3 +131,15 @@ dmypy.json
 # templates
 .github/templates/*
 .vscode/settings.json
+
+# Data
+data/
+
+# MacOS
+.DS_Store
+
+# Node / VS Code extension
+node_modules/
+*.vsix
+.vscode-test/
+out/
