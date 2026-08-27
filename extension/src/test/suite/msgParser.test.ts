@@ -13,9 +13,9 @@ suite('msgParser', () => {
   test('parses headers, attachments and an HTML body from sample.msg', () => {
     const email = parseMsg(readFixture('sample.msg'));
 
-    assert.strictEqual(email.subject, 'FW: Climax');
-    assert.strictEqual(email.from, 'Driver, Blake <blake.driver@intellitrans.com>');
-    assert.strictEqual(email.to, 'Watts, Allen <allen.watts@intellitrans.com>');
+    assert.strictEqual(email.subject, 'FW: Project Falcon');
+    assert.strictEqual(email.from, 'Reed, Morgan <morgan.reed@example.com>');
+    assert.strictEqual(email.to, 'Nolan, Casey <casey.nolan@example.com>');
     assert.ok(email.attachments.length > 0, 'expected at least one attachment');
     assert.ok(email.bodyHtml && email.bodyHtml.length > 0, 'expected a decoded HTML body, not a plain-text-only fallback');
   });
@@ -27,6 +27,6 @@ suite('msgParser', () => {
     assert.strictEqual(nested.length, 1, 'expected exactly one nested attachment');
 
     const inner = parseMsg(nested[0].bytes);
-    assert.strictEqual(inner.subject, 'FW: Morenci');
+    assert.strictEqual(inner.subject, 'FW: Project Cedar');
   });
 });
