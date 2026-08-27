@@ -3,7 +3,11 @@
   "displayName": "MailPeek",
   "description": "View .msg and .eml files, including nested forwarded emails, without leaving the editor.",
   "version": "0.0.1",
-  "publisher": "mailpeek",
+  "publisher": "nullgradlabs",
+  "author": {
+    "name": "Saradindu Sengupta",
+    "email": "saradindu@nullgradlabs.com"
+  },
   "license": "GPL-3.0-only",
   "engines": {
     "vscode": "^1.90.0"
