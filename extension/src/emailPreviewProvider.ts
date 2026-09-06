@@ -3,10 +3,27 @@ import { EmailDocument } from './emailDocument';
 import { NestedAttachmentFsProvider } from './fs/nestedAttachmentFsProvider';
 import { parseEmailFile } from './parsers';
 import { generateNonce, renderEmailShell } from './webview/renderEmail';
+import { sanitizeAttachmentFilename } from './sanitize';
+import { EmailData, EmailPreviewData } from './types/emailData';
 
 interface WebviewToExtensionMessage {
   type: 'ready' | 'openAttachment' | 'saveAttachment';
   index?: number;
+}
+
+// The webview never reads attachment bytes (Save/View are resolved extension-side,
+// keyed by index -- see onDidReceiveMessage below), so they're stripped here rather
+// than sent across postMessage uncapped.
+function toPreviewPayload(email: EmailData): EmailPreviewData {
+  return {
+    ...email,
+    attachments: email.attachments.map(({ name, size, isNestedMessage, isSignature }) => ({
+      name,
+      size,
+      isNestedMessage,
+      isSignature,
+    })),
+  };
 }
 
 export class EmailPreviewProvider implements vscode.CustomReadonlyEditorProvider<EmailDocument> {
@@ -26,7 +43,7 @@ export class EmailPreviewProvider implements vscode.CustomReadonlyEditorProvider
       return new EmailDocument(uri, undefined, message, false);
     }
 
-    const result = parseEmailFile(uri.path, bytes);
+    const result = await parseEmailFile(uri.path, bytes);
     if (result.status === 'ok') {
       return new EmailDocument(uri, result.email, undefined, false);
     }
@@ -55,11 +72,13 @@ export class EmailPreviewProvider implements vscode.CustomReadonlyEditorProvider
 
     webviewPanel.webview.onDidReceiveMessage(async (message: WebviewToExtensionMessage) => {
       if (message.type === 'ready') {
+        const collapseQuotedText = vscode.workspace.getConfiguration('mailpeek').get<boolean>('collapseQuotedText', true);
         webviewPanel.webview.postMessage({
           type: 'init',
           unsupported: document.unsupported,
           error: document.error,
-          email: document.email,
+          email: document.email ? toPreviewPayload(document.email) : undefined,
+          collapseQuotedText,
         });
         return;
       }
@@ -79,7 +98,9 @@ export class EmailPreviewProvider implements vscode.CustomReadonlyEditorProvider
         const nestedUri = this.nestedFs.register(document.uri, message.index, attachment.name, attachment.bytes);
         await vscode.commands.executeCommand('vscode.openWith', nestedUri, EmailPreviewProvider.viewType);
       } else if (message.type === 'saveAttachment') {
-        const target = await vscode.window.showSaveDialog({ defaultUri: vscode.Uri.file(attachment.name) });
+        const target = await vscode.window.showSaveDialog({
+          defaultUri: vscode.Uri.file(sanitizeAttachmentFilename(attachment.name)),
+        });
         if (target) {
           await vscode.workspace.fs.writeFile(target, attachment.bytes);
         }

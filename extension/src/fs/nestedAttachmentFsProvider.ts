@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { sanitizeAttachmentFilename } from '../sanitize';
 
 export const NESTED_SCHEME = 'mailpeek-nested';
 
@@ -28,7 +29,7 @@ export class NestedAttachmentFsProvider implements vscode.FileSystemProvider {
    */
   register(parentUri: vscode.Uri, attachmentIndex: number, suggestedName: string, data: Uint8Array): vscode.Uri {
     const id = Buffer.from(parentUri.toString()).toString('base64url');
-    const safeName = encodeURIComponent(suggestedName.replace(/[\\/]/g, '_') || 'attachment');
+    const safeName = encodeURIComponent(sanitizeAttachmentFilename(suggestedName));
     const uri = vscode.Uri.parse(`${NESTED_SCHEME}:/${id}/${attachmentIndex}-${safeName}`);
     const now = Date.now();
     const existing = this.store.get(uri.toString());
