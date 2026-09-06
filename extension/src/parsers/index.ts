@@ -1,4 +1,5 @@
 import { parseMsg } from './msgParser';
+import { parseEml } from './emlParser';
 import { EmailData } from '../types/emailData';
 
 export type ParseResult =
@@ -6,7 +7,7 @@ export type ParseResult =
   | { status: 'unsupported' }
   | { status: 'error'; message: string };
 
-export function parseEmailFile(fileName: string, bytes: Uint8Array): ParseResult {
+export async function parseEmailFile(fileName: string, bytes: Uint8Array): Promise<ParseResult> {
   const lower = fileName.toLowerCase();
 
   if (lower.endsWith('.msg')) {
@@ -18,8 +19,11 @@ export function parseEmailFile(fileName: string, bytes: Uint8Array): ParseResult
   }
 
   if (lower.endsWith('.eml')) {
-    // No .eml parser wired up yet -- see docs/plans/initial_plan.md, Milestone 2.
-    return { status: 'unsupported' };
+    try {
+      return { status: 'ok', email: await parseEml(bytes) };
+    } catch (err) {
+      return { status: 'error', message: err instanceof Error ? err.message : String(err) };
+    }
   }
 
   return { status: 'error', message: `Unrecognized file type: ${fileName}` };
