@@ -1,0 +1,10 @@
+.vscode/**
+.github/**
+src/**
+*.map
+.gitignore
+tsconfig.json
+tsconfig.webview.json
+eslint.config.mjs
+esbuild.js
+mailpeek-*.vsix

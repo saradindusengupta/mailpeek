@@ -1,0 +1,34 @@
+From: "Reed, Morgan" <morgan.reed@example.com>
+To: "Nolan, Casey" <casey.nolan@example.com>, "Ortiz, Dana" <dana.ortiz@example.com>
+Subject: FW: Q3 Roadmap Sync
+Date: Mon, 15 Jun 2026 14:30:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="MIXED_BOUNDARY_1"
+
+--MIXED_BOUNDARY_1
+Content-Type: multipart/alternative; boundary="ALT_BOUNDARY_1"
+
+--ALT_BOUNDARY_1
+Content-Type: text/plain; charset=utf-8
+
+Hi Casey and Dana,
+
+Forwarding the Q3 roadmap sync notes below.
+
+Thanks,
+Morgan
+
+--ALT_BOUNDARY_1
+Content-Type: text/html; charset=utf-8
+
+<html><body><p>Hi Casey and Dana,</p><p>Forwarding the Q3 roadmap sync notes below.</p><p>Thanks,<br>Morgan</p></body></html>
+
+--ALT_BOUNDARY_1--
+--MIXED_BOUNDARY_1
+Content-Type: text/plain; name="notes.txt"
+Content-Disposition: attachment; filename="notes.txt"
+Content-Transfer-Encoding: base64
+
+TGluZSBvbmUgb2YgdGhlIG5vdGVzLgpMaW5lIHR3byBvZiB0aGUgbm90ZXMuCg==
+
+--MIXED_BOUNDARY_1--

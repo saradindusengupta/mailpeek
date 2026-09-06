@@ -1,0 +1,175 @@
+body {
+  font-family: var(--vscode-font-family);
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  margin: 0;
+  padding: 16px;
+}
+
+.mp-header {
+  border-bottom: 1px solid var(--vscode-panel-border);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.mp-subject-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.mp-subject {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.mp-essentials {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.9em;
+  color: var(--vscode-descriptionForeground);
+}
+
+.mp-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-field-text {
+  overflow-wrap: anywhere;
+}
+
+.mp-copy-btn {
+  background: none;
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 4px;
+  color: var(--vscode-descriptionForeground);
+  cursor: pointer;
+  font-size: 0.8em;
+  padding: 1px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mp-copy-btn:hover {
+  color: var(--vscode-foreground);
+  border-color: var(--vscode-focusBorder);
+}
+
+.mp-link-button {
+  background: none;
+  border: none;
+  color: var(--vscode-textLink-foreground);
+  cursor: pointer;
+  padding: 6px 0 0 0;
+  font-size: 0.85em;
+}
+
+.mp-raw-headers {
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: var(--vscode-textCodeBlock-background);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.mp-attachments {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mp-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--vscode-badge-background);
+  color: var(--vscode-badge-foreground);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.85em;
+}
+
+.mp-chip-size {
+  opacity: 0.7;
+}
+
+.mp-chip-signature {
+  background: none;
+  border: 1px dashed var(--vscode-panel-border);
+  color: var(--vscode-descriptionForeground);
+}
+
+.mp-chip-btn {
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.85em;
+  padding: 1px 6px;
+}
+
+.mp-toggle-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.mp-tab {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.mp-tab.active {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.mp-body-frame {
+  width: 100%;
+  min-height: 60vh;
+  border: 1px solid var(--vscode-panel-border);
+  background: #ffffff;
+}
+
+.mp-body-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--vscode-editor-font-family);
+}
+
+.mp-empty {
+  color: var(--vscode-descriptionForeground);
+  padding: 24px 0;
+}
+
+.mp-error-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--vscode-errorForeground);
+}
+
+.mp-error-detail {
+  white-space: pre-wrap;
+}
+
+.mp-copy-btn:focus-visible,
+.mp-link-button:focus-visible,
+.mp-chip-btn:focus-visible,
+.mp-tab:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
+}

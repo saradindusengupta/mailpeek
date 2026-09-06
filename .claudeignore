@@ -1,0 +1,4 @@
+graph.json
+graphify-out/
+.beads/embeddeddolt/     # binary Dolt DB — churns on every claim/close
+.claude-mem/             # observation DB — writes constantly

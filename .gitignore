@@ -131,3 +131,29 @@ dmypy.json
 # templates
 .github/templates/*
 .vscode/settings.json
+
+# Data
+data/
+
+# MacOS
+.DS_Store
+
+# Node / VS Code extension
+node_modules/
+*.vsix
+.vscode-test/
+.vscode/
+out/
+# copied from ../README.md by extension/package.json's `package` script -- vsce
+# requires a README.md next to package.json, but the canonical one lives at the repo root
+extension/README.md
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
+.beads
+# Graphify
+graphify-out/
+# Openspec
+openspec/

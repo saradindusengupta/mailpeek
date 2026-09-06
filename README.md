@@ -1,42 +1,36 @@
-# Project Name
+# MailPeek
 
-Please run `Bootstrap Project` GitHub Action to bootstrap the project which will perform the following task
+A VS Code extension that opens `.msg` and `.eml` files directly in the editor — headers, body, and attachments — with forwarded/nested emails drilling down into their own tabs instead of leaving VS Code.
 
-- It defines the events that trigger the workflow, such as pushes or pull requests, and specifies the jobs and steps to be executed in response.
-- The workflow may include actions like checking out code, setting up environments, running tests, building artifacts, or deploying applications.
-- Each job runs in a fresh virtual environment and can be configured with specific runners, environment variables, and dependencies.
-- Customize this workflow to fit your project's CI/CD requirements.
+![MailPeek showing a forwarded .msg email with header, attachments, and body](assets/screenshots/msg-viewer.png)
 
-## Structure of the Repository
+## What it does
 
-This repository uses `setuptool` to create packages and uses `toml` file for package configuration
+- Opens `.msg` and `.eml` files directly in the editor: a header card (subject, from, to, cc, date — each copyable), the HTML or plain-text body (with an RTF-body fallback for `.msg`), and an attachment listing.
+- Nested `.msg`/`.eml` attachments (forwarded emails) drill down into their own tab instead of leaving VS Code.
+- Collapses long quoted/forwarded reply chains behind a toggle by default — configurable via the `mailpeek.collapseQuotedText` setting.
+- Matches your VS Code theme and is keyboard/screen-reader accessible.
+- Handles formats no parser here actually decodes with a clear, honest fallback instead of failing silently: TNEF/winmail.dat shows as a plain attachment, S/MIME signed mail shows its real body with the signature labeled distinctly, and S/MIME encrypted mail shows an explanatory notice.
 
-```text
-├── Dockerfile               # The file to build a container using build a or docker container
-├── CONTRIBUTING.md          # Onboarding instructions for new contributors
-├── docs                     # Documentation site (PyDocs)
-├── .github                  # Github metadata for repository
-│   ├── release_message.sh   # A script to generate a release message
-│   ├── ISSUE_TEMPLATE       # Templates
-│   └── workflows            # The CI pipeline for Github Actions
-├── .gitignore               # A list of files to ignore when pushing to Github
-├── HISTORY.md               # Auto generated list of changes to the project
-├── LICENSE                  # The license for the project
-├── Makefile                 # A collection of utilities to manage the project
-├── MANIFEST.in              # A list of files to include in a package
-├── src/{project_name}       # The main python package for the project
-│   ├── __init__.py          # This tells Python that this is a package
-│   ├── info.py              # Project info [Author, version]
-├── data                     # Required data
-├── notebooks                # Jupyter Notebooks for the project
-├── config                   # Required configuration files
-├── README.md                # The main readme for the project
-├── requirements.txt         # List of requirements for the project
-├── requirements-test.txt    # List of requirements for testing and development
-├── pyproject.toml           # The file for installing and packaging the project
-└── tests                    # Unit tests for the project (add mote tests files here)
-    ├── data                 # Data and fixtures for pytest
-    ├── __init__.py          # This tells Python that this is a test package
-    ├── conftest.py          # Configuration, hooks and fixtures for pytest
-    └── test_base.py         # The base test case for the project
+## Screenshots
+
+| `.eml` with attachments and quoted-content toggles | S/MIME signed (signature labeled distinctly)                  | S/MIME encrypted (explanatory notice)                               |
+| ---------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------- |
+| ![.eml viewer](assets/screenshots/eml-viewer.png)    | ![S/MIME signed message](assets/screenshots/smime-signed.png) | ![S/MIME encrypted message](assets/screenshots/smime-encrypted.png) |
+
+## Privacy
+
+Everything is parsed locally in the extension host. No email content, headers, or attachments are transmitted anywhere. Remote images and external resources referenced by an email's HTML body are never loaded.
+
+## Development
+
+Not yet published to the Marketplace (see [docs/plans/publish_to_marketplace.md](docs/plans/publish_to_marketplace.md)) — build and try it locally:
+
+```bash
+cd extension
+npm install
 ```
+
+**Iterate on the code**: `npm run compile` (or `npm run watch` for incremental rebuilds), then press `F5` in VS Code (with `extension/` open, or the repo root — `launch.json` points at `extension/`) to launch an Extension Development Host, and open one of the sample files in `data/*.msg`.
+
+**Just try it**: `npm run package`, then `code --install-extension mailpeek-0.0.1.vsix --force`. Reload VS Code (`Cmd+Shift+P` → "Developer: Reload Window") or restart it, then open any `.msg` or `.eml` file — it opens directly in the MailPeek viewer. Re-run the same two commands to pick up a newer build.

@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "mailpeek",
+  "project_id": "6da1c847-8322-4d88-a5cd-8122a8a28405"
+}
