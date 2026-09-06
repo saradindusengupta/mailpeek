@@ -1,12 +1,27 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
-import { parseMsg } from '../../parsers/msgParser';
+import type { FieldsData } from '@kenjiuno/msgreader';
+import { parseMsg, resolveBody, MAX_DECOMPRESSED_RTF_BYTES } from '../../parsers/msgParser';
 
 const fixturesDir = path.resolve(__dirname, '..', '..', '..', 'src', 'test', 'fixtures');
 
 function readFixture(name: string): Uint8Array {
   return new Uint8Array(fs.readFileSync(path.join(fixturesDir, name)));
+}
+
+const UNCOMPRESSED = 0x414c454d;
+
+// Builds a PidTagRtfCompressed-shaped buffer in decompressRTF's "uncompressed" mode
+// (16-byte header + raw payload, sliced verbatim) -- avoids needing a real LZFu
+// compressor just to control the decompressed output size in a test.
+function buildUncompressedRtf(payload: Buffer): Uint8Array {
+  const header = Buffer.alloc(16);
+  header.writeInt32LE(payload.length + 4, 0);
+  header.writeInt32LE(payload.length, 4);
+  header.writeInt32LE(UNCOMPRESSED, 8);
+  header.writeInt32LE(0, 12);
+  return new Uint8Array(Buffer.concat([header, payload]));
 }
 
 suite('msgParser', () => {
@@ -28,5 +43,29 @@ suite('msgParser', () => {
 
     const inner = parseMsg(nested[0].bytes);
     assert.strictEqual(inner.subject, 'FW: Project Cedar');
+  });
+
+  test('decodes a compressed-RTF body within the size cap', () => {
+    const rtf = Buffer.from('{\\rtf1\\ansi\\ansicpg1252\\fromtext Hello from a small RTF body}', 'utf8');
+    const fields = {
+      compressedRtf: buildUncompressedRtf(rtf),
+      body: 'FALLBACK_BODY_TEXT',
+    } as unknown as FieldsData;
+
+    const { bodyHtml, bodyText } = resolveBody(fields);
+    assert.notStrictEqual(bodyText, 'FALLBACK_BODY_TEXT', 'expected the RTF body to be decoded, not the fallback');
+    assert.ok((bodyHtml || bodyText || '').includes('Hello from a small RTF body'));
+  });
+
+  test('falls back to plain text when decompressed RTF exceeds the size cap', () => {
+    const oversized = Buffer.alloc(MAX_DECOMPRESSED_RTF_BYTES + 1024, 0x41);
+    const fields = {
+      compressedRtf: buildUncompressedRtf(oversized),
+      body: 'FALLBACK_BODY_TEXT',
+    } as unknown as FieldsData;
+
+    const { bodyHtml, bodyText } = resolveBody(fields);
+    assert.strictEqual(bodyHtml, undefined);
+    assert.strictEqual(bodyText, 'FALLBACK_BODY_TEXT');
   });
 });
