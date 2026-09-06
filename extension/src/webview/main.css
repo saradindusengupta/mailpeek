@@ -102,6 +102,12 @@ body {
   opacity: 0.7;
 }
 
+.mp-chip-signature {
+  background: none;
+  border: 1px dashed var(--vscode-panel-border);
+  color: var(--vscode-descriptionForeground);
+}
+
 .mp-chip-btn {
   background: none;
   border: 1px solid currentColor;
@@ -158,4 +164,12 @@ body {
 
 .mp-error-detail {
   white-space: pre-wrap;
+}
+
+.mp-copy-btn:focus-visible,
+.mp-link-button:focus-visible,
+.mp-chip-btn:focus-visible,
+.mp-tab:focus-visible {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
 }
