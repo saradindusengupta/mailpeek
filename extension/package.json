@@ -9,11 +9,23 @@
     "email": "saradindu@nullgradlabs.com"
   },
   "license": "GPL-3.0-only",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "email",
+    "msg",
+    "eml",
+    "outlook",
+    "viewer",
+    "mail",
+    "message",
+    "attachments"
   ],
   "repository": {
     "type": "git",
@@ -35,7 +47,17 @@
         ],
         "priority": "default"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "MailPeek",
+      "properties": {
+        "mailpeek.collapseQuotedText": {
+          "type": "boolean",
+          "default": true,
+          "description": "Collapse quoted/forwarded content (Original Message markers, On...wrote: replies, and HTML blockquotes) behind a toggle so long forward chains are readable by default."
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -47,18 +69,20 @@
     "lint": "eslint src",
     "pretest": "npm run compile",
     "test": "node out/test/runTest.js",
-    "package": "vsce package"
+    "license-check": "license-checker --production --excludePackages \"mailpeek@0.0.1\" --failOn \"GPL-1.0-only;GPL-1.0-or-later;GPL-2.0-only;GPL-2.0-or-later;GPL-3.0-only;GPL-3.0-or-later;AGPL-1.0-only;AGPL-1.0-or-later;AGPL-3.0-only;AGPL-3.0-or-later;LGPL-2.0-only;LGPL-2.0-or-later;LGPL-2.1-only;LGPL-2.1-or-later;LGPL-3.0-only;LGPL-3.0-or-later;SSPL-1.0;UNLICENSED\"",
+    "package": "npm run license-check && node -e \"require('fs').copyFileSync('../README.md','README.md')\" && vsce package"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.7",
     "@types/node": "^20.14.0",
     "@types/vscode": "^1.90.0",
-    "@vscode/test-electron": "^3.0.0",
+    "@vscode/test-electron": "^3.1.0",
     "@vscode/vsce": "^3.9.2",
     "concurrently": "^8.2.2",
     "esbuild": "^0.25.0",
     "eslint": "^9.9.0",
     "glob": "^11.0.0",
+    "license-checker": "^25.0.1",
     "mocha": "^10.7.3",
     "typescript": "^5.5.0",
     "typescript-eslint": "^8.0.1"
@@ -68,6 +92,7 @@
     "@kenjiuno/msgreader": "^1.28.0",
     "dompurify": "^3.1.6",
     "iconv-lite": "^0.7.3",
+    "postal-mime": "^3.0.0",
     "rtf-stream-parser": "^3.7.9"
   },
   "overrides": {
