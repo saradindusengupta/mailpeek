@@ -144,8 +144,16 @@ node_modules/
 .vscode-test/
 .vscode/
 out/
+# copied from ../README.md by extension/package.json's `package` script -- vsce
+# requires a README.md next to package.json, but the canonical one lives at the repo root
+extension/README.md
 
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db
 .beads-credential-key
+.beads
+# Graphify
+graphify-out/
+# Openspec
+openspec/
