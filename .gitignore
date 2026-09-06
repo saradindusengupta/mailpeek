@@ -152,7 +152,6 @@ extension/README.md
 .dolt/
 *.db
 .beads-credential-key
-.beads
 # Graphify
 graphify-out/
 # Openspec
