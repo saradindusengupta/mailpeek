@@ -4,7 +4,6 @@ import { EmailData } from '../types/emailData';
 
 export type ParseResult =
   | { status: 'ok'; email: EmailData }
-  | { status: 'unsupported' }
   | { status: 'error'; message: string };
 
 export async function parseEmailFile(fileName: string, bytes: Uint8Array): Promise<ParseResult> {

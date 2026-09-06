@@ -4,7 +4,6 @@ import { findQuoteMarkerIndex } from '../quoteHeuristics';
 
 interface InitMessage {
   type: 'init';
-  unsupported: boolean;
   error: string | undefined;
   email: EmailPreviewData | undefined;
   collapseQuotedText: boolean;
@@ -79,10 +78,6 @@ function wrapBlockquotes(html: string): string {
     details.appendChild(blockquote);
   });
   return template.innerHTML;
-}
-
-function renderUnsupported(): void {
-  root.appendChild(el('div', 'mp-empty', '.eml files are not supported yet — .msg support is implemented first. See docs/plans/initial_plan.md.'));
 }
 
 function renderError(message: string): void {
@@ -248,9 +243,7 @@ window.addEventListener('message', (event: MessageEvent<InitMessage>) => {
   if (message.type !== 'init') return;
 
   root.innerHTML = '';
-  if (message.unsupported) {
-    renderUnsupported();
-  } else if (message.error) {
+  if (message.error) {
     renderError(message.error);
   } else if (message.email) {
     renderEmail(message.email, message.collapseQuotedText);

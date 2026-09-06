@@ -40,17 +40,14 @@ export class EmailPreviewProvider implements vscode.CustomReadonlyEditorProvider
       bytes = await vscode.workspace.fs.readFile(uri);
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      return new EmailDocument(uri, undefined, message, false);
+      return new EmailDocument(uri, undefined, message);
     }
 
     const result = await parseEmailFile(uri.path, bytes);
     if (result.status === 'ok') {
-      return new EmailDocument(uri, result.email, undefined, false);
+      return new EmailDocument(uri, result.email, undefined);
     }
-    if (result.status === 'unsupported') {
-      return new EmailDocument(uri, undefined, undefined, true);
-    }
-    return new EmailDocument(uri, undefined, result.message, false);
+    return new EmailDocument(uri, undefined, result.message);
   }
 
   async resolveCustomEditor(document: EmailDocument, webviewPanel: vscode.WebviewPanel): Promise<void> {
@@ -75,7 +72,6 @@ export class EmailPreviewProvider implements vscode.CustomReadonlyEditorProvider
         const collapseQuotedText = vscode.workspace.getConfiguration('mailpeek').get<boolean>('collapseQuotedText', true);
         webviewPanel.webview.postMessage({
           type: 'init',
-          unsupported: document.unsupported,
           error: document.error,
           email: document.email ? toPreviewPayload(document.email) : undefined,
           collapseQuotedText,
